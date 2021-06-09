@@ -1,6 +1,8 @@
 # Course Flutter
 
-A new Flutter project.
+Develop NATIVE and PROFESSIONAL Apps for ANDROID and iOS with JUST 1 CODE! Flutter: the GOOGLE REVOLUTION! - 2021
+
+https://www.udemy.com/share/101WimBEcZdV9WQ34=/
 
 ## Getting Started
 
