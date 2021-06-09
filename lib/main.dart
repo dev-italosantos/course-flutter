@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _toDoList = [];
+  List _toDoList = ["Italo", "Nalyson", "Test"];
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +33,45 @@ class _HomeState extends State<Home> {
             padding: EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
             child: Row(
               children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: "Nova Tarefa",
-                    labelStyle: TextStyle(color: Colors.purpleAccent),
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: "Nova Tarefa",
+                      labelStyle: TextStyle(color: Colors.purpleAccent),
+                    ),
                   ),
                 ),
-                RaisedButton(
-                  color: Colors.purpleAccent,
-                  child: Text("ADD"),
-                  textColor: Colors.white,
+                ElevatedButton(
                   onPressed: () {},
+                  child: Text("ADD"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.purpleAccent,
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 )
               ],
             ),
-          )
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 10.0),
+              itemCount: _toDoList.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  onChanged: (value) {},
+                  title: Text(_toDoList[index]["title"]),
+                  value: _toDoList[index]["ok"],
+                  secondary: CircleAvatar(
+                    child: Icon(
+                        _toDoList[index]["ok"] ? Icons.check : Icons.error),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
