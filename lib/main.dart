@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
                     controller: _toDoController,
                     decoration: InputDecoration(
                       labelText: "Nova Tarefa",
-                      labelStyle: TextStyle(color: Colors.purpleAccent),
+                      labelStyle: TextStyle(color: Colors.purple),
                     ),
                   ),
                 ),
@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
                   onPressed: _addToDo,
                   child: Text("Add"),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.purpleAccent,
+                    primary: Colors.purple,
                     textStyle: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -94,11 +94,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildItem(context, index) {
+  Widget buildItem(BuildContext context, int index) {
+    Map<String, dynamic> _lastRemoved;
+    int _lastRemovedPos;
+
     return Dismissible(
       key: Key(DateTime.now().microsecondsSinceEpoch.toString()),
       background: Container(
-        color: Colors.red,
+        color: Colors.grey,
         child: Align(
           alignment: Alignment(-0.9, 0.0),
           child: Icon(
@@ -121,6 +124,32 @@ class _HomeState extends State<Home> {
           child: Icon(_toDoList[index]["ok"] ? Icons.check : Icons.error),
         ),
       ),
+      onDismissed: (direction) {
+        setState(
+          () {
+            _lastRemoved = Map.from(_toDoList[index]);
+            _lastRemovedPos = index;
+            _toDoList.removeAt(index);
+
+            _saveData();
+
+            final snack = SnackBar(
+              content: Text("Tarefa \"${_lastRemoved["title"]}\" removid"),
+              action: SnackBarAction(
+                label: "Desfazer",
+                onPressed: () {
+                  setState(() {
+                    _toDoList.insert(_lastRemovedPos, _lastRemoved);
+                    _saveData();
+                  });
+                },
+              ),
+              duration: Duration(seconds: 3),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(snack);
+          },
+        );
+      },
     );
   }
 
