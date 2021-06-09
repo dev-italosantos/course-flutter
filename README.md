@@ -1,4 +1,4 @@
-# todo_list
+# Course Flutter
 
 A new Flutter project.
 
