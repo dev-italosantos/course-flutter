@@ -5,6 +5,7 @@ void main() {
   runApp(
     MaterialApp(
       home: GifFinderPage(),
+      theme: ThemeData(hintColor: Colors.white),
     ),
   );
 }
