@@ -17,25 +17,26 @@ class _GifFinderPageState extends State<GifFinderPage> {
   Future<Map> _getGifs() async {
     http.Response response;
 
-    if (_search == null)
+    // ignore: unnecessary_null_comparison
+    if (_search == null) {
       response = await http.get(
         Uri(
             path:
                 "https://api.giphy.com/v1/gifs/trending?api_key=xTYujjERq2SZIpQWCacZH7KtmWibpMnb&limit=20&rating=g"),
       );
-    else
+    } else {
       response = await http.get(
         Uri(
             path:
                 "https://api.giphy.com/v1/gifs/search?api_key=xTYujjERq2SZIpQWCacZH7KtmWibpMnb&q=$_search&=20&offset=$_offset&rating=g&lang=en"),
       );
+    }
 
     return json.decode(response.body);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getGifs().then((map) {
       print(map);
@@ -44,6 +45,66 @@ class _GifFinderPageState extends State<GifFinderPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        title: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Image.network(
+            "https://image.flaticon.com/icons/png/512/1837/1837538.png",
+            width: 50.0,
+            height: 50.0,
+          ),
+        ),
+      ),
+      backgroundColor: Colors.black,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: "Pesquise Aqui!",
+                labelStyle: TextStyle(color: Colors.white),
+                border: OutlineInputBorder(),
+              ),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+              ),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: _getGifs(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return Container(
+                      width: 200.0,
+                      height: 200.0,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 5.0,
+                      ),
+                    );
+                  default:
+                    if (snapshot.hasError)
+                      return Container();
+                    else
+                      return _createGifTable(context, snapshot);
+                }
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
     return Container();
   }
 }
